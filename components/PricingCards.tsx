@@ -18,11 +18,11 @@ const tiers = [
         ],
     },
     {
-        name: "pro",
+        name: "Pro",
         id: "pro",
         href: "#",
         priceMonthly: "$6.99",
-        description: "Unlock the Full Potential with pro!",
+        description: "Unlock the Full Potential with Pro!",
         features: [
             "Unlimited Messages per Chat",
             "Unlimited Participants per chat",
