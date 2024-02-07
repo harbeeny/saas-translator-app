@@ -1,3 +1,4 @@
+import { generatePortalLink } from '@/actions/generatePortalLink';
 import React from 'react'
 
 function ManageAccountButton() {
