@@ -17,7 +17,7 @@ const subscriptionConverter: FirestoreDataConverter<Subscription> = {
     },
     fromFirestore: function (
         snapshot: QueryDocumentSnapshot,
-    options: SnapshotOptions
+        options: SnapshotOptions
     ): Subscription {
         const data = snapshot.data(options);
 
@@ -35,7 +35,7 @@ const subscriptionConverter: FirestoreDataConverter<Subscription> = {
             product: data.product,
             quantity: data.quantity,
             status: data.status,
-            stripeLink: data.string,
+            stripeLink: data.stripeLink,
             cancel_at: data.cancel_at,
             canceled_at: data.canceled_at,
             current_period_end: data.current_period_end,

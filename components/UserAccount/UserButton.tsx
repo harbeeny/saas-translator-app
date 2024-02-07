@@ -28,40 +28,44 @@ const UserButton = ({session}:{session: Session | null}) => {
   );
 
   return (
-    session && (
     <DropdownMenu>
-      <DropdownMenuTrigger>
-        <UserAvatar name={session.user?.name} image={session.user?.image} />        
-      </DropdownMenuTrigger>
-      <DropdownMenuContent>
-        <DropdownMenuLabel>{session.user?.name}</DropdownMenuLabel>
-        <DropdownMenuSeparator />
-
-        {subscription === undefined && (
-          <DropdownMenuItem>
-            <LoadingSpinner />
-          </DropdownMenuItem>
-        )};
-
-        {subscription?.role === "pro" && (
-          <>
-            <DropdownMenuLabel className="text-sm flex items-center justify-center space-x-1 text-[#E935C1] animate-pulse">
-              <StarIcon fill="#E935C1" />
-              <p>pro</p>
-            </DropdownMenuLabel>
-
+      {session && (
+        <>
+          <DropdownMenuTrigger>
+            <UserAvatar name={session.user.name} image={session.user.image} />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuLabel>Hi {session.user.name}!</DropdownMenuLabel>
             <DropdownMenuSeparator />
 
-            <DropdownMenuItem>
-               <ManageAccountButton /> 
-            </DropdownMenuItem>
-          </>
-        )}
+            {subscription === undefined && (
+              <DropdownMenuItem>
+                <LoadingSpinner />
+              </DropdownMenuItem>
+            )}
 
-        <DropdownMenuItem onClick={() => signOut()}>Sign Out</DropdownMenuItem>
-      </DropdownMenuContent>
+            {subscription?.role === "pro" && (
+              <>
+                <DropdownMenuLabel className="text-xs flex items-center justify-center space-x-1 text-[#E935C1] animate-pulse">
+                  <StarIcon fill="#E935C1" />
+                  <p>PRO</p>
+                </DropdownMenuLabel>
+
+                <DropdownMenuSeparator />
+
+                <DropdownMenuItem>
+                  <ManageAccountButton />
+                </DropdownMenuItem>
+              </>
+            )}
+
+            <DropdownMenuItem onClick={() => signOut()}>
+              Sign Out
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </>
+      )}
     </DropdownMenu>
-    )
   );
 }
 
