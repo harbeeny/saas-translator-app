@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import TranslationGif from '@/assets/landingPage/translation.gif'
+import DemoGif from '@/assets/landingPage/demo.gif'
 
 const Home = async () => {
   return (
@@ -42,7 +42,7 @@ const Home = async () => {
                   href="/pricing"
                   className='text-sm font-semibold leading-6 text-gray-900 dark:text-gray-300'
                 >
-                  View Pricing <span aria-hidden="true">"@"</span>
+                  View Pricing <span aria-hidden="true">→</span>
                 </Link>
               </div>
             </div>
@@ -51,7 +51,7 @@ const Home = async () => {
               <div className="-m-2 rounded-xl bg-gray-900/5 p-2 ring-1 ring-inset ring-gray-900/10 lg:-m-4 lg:rounded-2xl lg:p-4">
                 <Image 
                   unoptimized
-                  src={TranslationGif}
+                  src={DemoGif}
                   alt="App screenshot"
                   width={2432}
                   height={1442}
