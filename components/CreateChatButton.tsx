@@ -42,9 +42,21 @@ const CreateChatButton = ({isLarge}: { isLarge?: boolean}) => {
         isAdmin: true,
         chatId: chatId,
         image: session.user.image || "",
-      })
-
-        router.push('/chat/abc');
+      }).then(() => {
+          toast({
+            title:"Success",
+            description:"Your chat has been created!",
+            className: "bg-green-600 text-white",
+            duration: 2000,
+          });
+          router.push(`/chat/${chatId}`);
+      }).catch(() => {
+        toast({
+          title:"Error",
+          description:"There was an error creating your chat!",
+          variant:"destructive",
+        });
+      }).finally(() => setLoading(false));
     };
 
     if (isLarge)
@@ -57,8 +69,8 @@ const CreateChatButton = ({isLarge}: { isLarge?: boolean}) => {
       )
 
   return (
-    <Button variant={"ghost"} onClick={createNewChat}>
-        <MessageSquarePlusIcon />
+    <Button size={"icon"} variant={"ghost"} onClick={createNewChat}>
+        {loading ? <LoadingSpinner /> : <MessageSquarePlusIcon />}
     </Button>
   );
 };
