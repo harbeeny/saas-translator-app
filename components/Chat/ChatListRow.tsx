@@ -1,6 +1,9 @@
 "use client";
 
-function ChatListRow() {
+import { Skeleton } from "@/components/ui/skeleton"
+
+
+function ChatListRow({ chatId }: { chatId: string }) {
     return (
         <div>
             Chat
