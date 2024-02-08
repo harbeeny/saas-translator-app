@@ -10,12 +10,12 @@ import {
   } from "@/components/ui/dropdown-menu"
 import UserAvatar from "./UserAvatar";
 import { Session } from "next-auth";
-import { Button } from "../ui/button";
+import { Button } from "./ui/button";
 import { signIn, signOut } from "next-auth/react";
 import { useSubscriptionStore } from "@/store/store";
-import LoadingSpinner from "../LoadingSpinner";
+import LoadingSpinner from "./LoadingSpinner";
 import { StarIcon } from "lucide-react";
-import ManageAccountButton from "../ManageAccountButton";
+import ManageAccountButton from "./ManageAccountButton";
   
 
 const UserButton = ({session}:{session: Session | null}) => {

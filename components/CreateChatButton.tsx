@@ -1,13 +1,13 @@
 "use client";
 
 import { MessageSquarePlusIcon } from "lucide-react";
-import { Button } from "../ui/button";
+import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
 import { useSubscriptionStore } from "@/store/store";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
-import { useToast } from "../ui/use-toast";
-import LoadingSpinner from "../LoadingSpinner";
+import { useToast } from "./ui/use-toast";
+import LoadingSpinner from "./LoadingSpinner";
 import { v4 as uuidv4 } from "uuid";
 import { serverTimestamp, setDoc } from "firebase/firestore";
 import { addChatRef } from "@/lib/converter/ChatMembers";

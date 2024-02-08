@@ -1,4 +1,4 @@
-import ChatList from "@/components/Chat/ChatList";
+import ChatList from "@/components/ChatList";
 
 type Props = {
     params: {};

@@ -1,12 +1,13 @@
 import Logo from './Logo'
 import { DarkMode } from './DarkmodeToggle/Darkmode'
-import UserButton from './UserAccount/UserButton'
+import UserButton from './UserButton'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/auth'
 import { MessagesSquareIcon } from 'lucide-react'
 import Link from 'next/link'
-import CreateChatButton from './Chat/CreateChatButton'
+import CreateChatButton from './CreateChatButton'
 import UpgradeBanner from './UpgradeBanner'
+import LanguageSelect from "./LanguageSelect";
 
 
 const Header = async () => {
@@ -18,7 +19,7 @@ const Header = async () => {
             <Logo />
 
             <div className='flex-1 flex items-center justify-end space-x-4'>
-                {/* Lanuage Select */}
+                <LanguageSelect />
 
                 {session ? (
                     <>
