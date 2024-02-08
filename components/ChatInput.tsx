@@ -43,6 +43,9 @@ function ChatInput({ chatId }: { chatId: string }) {
   const router = useRouter();
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    const inputCopy = values.input.trim();
+    form.reset();
+
     if (values.input.length === 0) {
       return;
     }
@@ -89,12 +92,11 @@ function ChatInput({ chatId }: { chatId: string }) {
     };
 
     addDoc(messagesRef(chatId), {
-      input: values.input,
+      input: inputCopy,
       timestamp: serverTimestamp(),
       user: userToStore,
     });
 
-    form.reset();
   }
 
   return (

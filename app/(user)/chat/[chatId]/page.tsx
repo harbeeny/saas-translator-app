@@ -1,6 +1,11 @@
 import { authOptions } from "@/auth";
 import { getServerSession } from "next-auth";
 import ChatInput from "@/components/ChatInput";
+import ChatMessages from "@/components/ChatMessages";
+import { getDocs } from "firebase/firestore";
+import { chatMembersRef } from "@/lib/converter/ChatMembers";
+import { sortedMessagesRef } from "@/lib/converter/Message";
+import { redirect } from "next/navigation";
 
 type Props = {
   params: {
@@ -10,14 +15,31 @@ type Props = {
 
 async function ChatPage({ params: { chatId } }: Props) {
   const session = await getServerSession(authOptions);
+
+  const initialMessages = (await getDocs(sortedMessagesRef(chatId))).docs.map(
+    (doc) => doc.data()
+  );
+
+  const hasAccess = (await getDocs(chatMembersRef(chatId))).docs
+    .map((doc) => doc.id)
+    .includes(session?.user.id!);
+
+  if (!hasAccess) redirect("/chat?error=permission");
+
+
   return (
     <>
         {/* Admin controls */}
         {/* ChatMembers badge */}
 
-        {/* Chat messages  */}
+        <div className="flex-1">
+          <ChatMessages
+            chatId={chatId}
+            session={session}
+            initialMessages={initialMessages}
+          />
+        </div>
         
-        {/* Chat Input  */}
         <ChatInput chatId={chatId}/>
     </>
   )
