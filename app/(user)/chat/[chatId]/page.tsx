@@ -1,6 +1,10 @@
-import React from 'react'
+import { authOptions } from "@/auth";
+import { getServerSession } from "next-auth";
+import ChatInput from "@/components/ChatInput";
 
-function ChatPage() {
+
+async function ChatPage() {
+  const session = await getServerSession(authOptions);
   return (
     <>
         {/* Admin controls */}
@@ -9,6 +13,7 @@ function ChatPage() {
         {/* Chat messages  */}
         
         {/* Chat Input  */}
+        <ChatInput />
     </>
   )
 }

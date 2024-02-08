@@ -8,6 +8,7 @@ import { Avatar, AvatarFallback } from "./ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useSession } from "next-auth/react";
 import UserAvatar  from "./UserAvatar";
+import { useLanguageStore } from "@/store/store";
 
 
 function ChatListRow({ chatId }: { chatId: string }) {
@@ -42,7 +43,7 @@ function ChatListRow({ chatId }: { chatId: string }) {
           </p>
   
           <p className="text-gray-400 line-clamp-1">
-            "Get the conversation started..."
+            {message?.translated?.[language] || "Get the conversation started..."}
           </p>
         </div>
   
