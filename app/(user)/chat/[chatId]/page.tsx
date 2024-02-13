@@ -44,7 +44,7 @@ async function ChatPage({ params: { chatId } }: Props) {
         
         <ChatInput chatId={chatId}/>
     </>
-  )
+  );
 }
 
 export default ChatPage
