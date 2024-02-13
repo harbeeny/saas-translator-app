@@ -9,8 +9,12 @@ import { useSession } from "next-auth/react";
 import { useToast } from "./ui/use-toast";
 import LoadingSpinner from "./LoadingSpinner";
 import { v4 as uuidv4 } from "uuid";
-import { serverTimestamp, setDoc } from "firebase/firestore";
-import { addChatRef } from "@/lib/converter/ChatMembers";
+import { serverTimestamp, setDoc, getDocs } from "firebase/firestore";
+import { 
+  addChatRef, 
+  chatMembersCollectionGroupRef, 
+} from "@/lib/converter/ChatMembers";
+import { ToastAction } from "./ui/toast";
 
 const CreateChatButton = ({isLarge}: { isLarge?: boolean}) => {
     const router = useRouter();
@@ -29,9 +33,34 @@ const CreateChatButton = ({isLarge}: { isLarge?: boolean}) => {
         duration: 3000,
       });
 
-      // TODO: Check if user is pro and limit them creating a new chat 
+    // Need to get the users current chats to check if they're about to exceed the PRO plan
+    const chats = (
+      await getDocs(chatMembersCollectionGroupRef(session.user.id))
+    ).docs.map((doc) => doc.data());
 
-      // ---
+    // check if the user is about to exceed the PRO plan which is 3 chats
+    const isPro =
+      subscription?.role === "pro" && subscription.status === "active";
+    if (!isPro && chats.length >= 3) {
+      toast({
+        title: "Free plan limit exceeded",
+        description:
+          "You've'exceeded the limit of chats for the FREE plan. Please upgrade to PRO to continue adding users to chats!",
+        variant: "destructive",
+        action: (
+          <ToastAction
+            altText="Upgrade"
+            onClick={() => router.push("/register")}
+          >
+            Upgrade to PRO
+          </ToastAction>
+        ),
+      });
+
+      setLoading(false);
+
+      return;
+    }
 
       const chatId = uuidv4();
 

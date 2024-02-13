@@ -37,11 +37,6 @@ export function ShareLink({
       ? `http://${host}/chat/${chatId}`
       : `https://${host}/chat/${chatId}`;
 
-  // const linkToChat =
-  //   process.env.NODE_ENV !== "development"
-  //     ? `https://${process.env.VERCEL_URL}/chat/${chatId}`
-  //     : `http://localhost:3000/chat/${chatId}`;
-
   async function copyToClipboard() {
     try {
       await navigator.clipboard.writeText(linkToChat);
