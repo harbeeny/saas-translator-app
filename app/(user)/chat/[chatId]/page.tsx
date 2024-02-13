@@ -6,6 +6,8 @@ import { getDocs } from "firebase/firestore";
 import { chatMembersRef } from "@/lib/converter/ChatMembers";
 import { sortedMessagesRef } from "@/lib/converter/Message";
 import { redirect } from "next/navigation";
+import ChatMembersBadge from "@/components/ChatMembersBadge";
+import AdminControls from "@/components/AdminControls";
 
 type Props = {
   params: {
@@ -29,8 +31,8 @@ async function ChatPage({ params: { chatId } }: Props) {
 
   return (
     <>
-        {/* Admin controls */}
-        {/* ChatMembers badge */}
+        <AdminControls  chatId={chatId}/>
+        <ChatMembersBadge chatId={chatId}/>
 
         <div className="flex-1">
           <ChatMessages
