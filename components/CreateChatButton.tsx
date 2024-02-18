@@ -15,14 +15,16 @@ import {
   chatMembersCollectionGroupRef, 
 } from "@/lib/converter/ChatMembers";
 import { ToastAction } from "./ui/toast";
+import { subscriptionRef } from "@/lib/converter/Subscription";
+import { Subscription } from "@/types/Subscription";
 
 const CreateChatButton = ({isLarge}: { isLarge?: boolean}) => {
     const router = useRouter();
     const { data: session } = useSession();
     const [loading, setLoading] = useState(false);
     const { toast } = useToast();
-    const subscription = useSubscriptionStore((state) => state.subscription);
-
+    // const subscription = useSubscriptionStore((state) => state.subscription);
+    
     const createNewChat= async() => {
       if (!session?.user.id) return;
 
@@ -32,12 +34,22 @@ const CreateChatButton = ({isLarge}: { isLarge?: boolean}) => {
         description: "Hold tight while we create your new chat!",
         duration: 3000,
       });
-
+    
     // Need to get the users current chats to check if they're about to exceed the PRO plan
     const chats = (
       await getDocs(chatMembersCollectionGroupRef(session.user.id))
     ).docs.map((doc) => doc.data());
 
+    const subscriptions = (
+      await getDocs(subscriptionRef(session.user.id))
+    ).docs.map((doc) => doc.data());
+    let subscription : Subscription;
+      if(subscriptions.length>0) {
+        subscription = subscriptions[0]
+      }
+      
+      console.log("subscription");
+      console.log(subscription);
     // check if the user is about to exceed the PRO plan which is 3 chats
     const isPro =
       subscription?.role === "pro" && subscription.status === "active";

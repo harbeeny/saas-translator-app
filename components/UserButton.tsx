@@ -20,6 +20,8 @@ import ManageAccountButton from "./ManageAccountButton";
 
 const UserButton = ({session}:{session: Session | null}) => {
     const subscription = useSubscriptionStore((state) => state.subscription);
+  console.log(session);
+  console.log()
 
   if (!session) return (
     <Button variant={'outline'} onClick={()=> signIn()}>

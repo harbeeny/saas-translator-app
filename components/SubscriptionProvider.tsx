@@ -1,36 +1,42 @@
 "use client";
 
-import { subscriptionRef } from "@/lib/converter/Subscription";
-import { useSubscriptionStore } from "@/store/store";
-import { onSnapshot } from "firebase/firestore";
-import { useSession } from "next-auth/react"
 import { useEffect } from "react";
+import { onSnapshot } from "firebase/firestore";
+import { useSubscriptionStore } from "@/store/store";
+import { subscriptionRef } from "@/lib/converter/Subscription";
+import { useSession } from "next-auth/react";
 
-function SubscriptionProvider({children,}: {children: React.ReactNode}) {
-    const{ data: session } =useSession();
-        const setSubscription = useSubscriptionStore(
-            (state) => state.setSubscription
-        );
+export default function SubscriptionProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const { data: session } = useSession();
 
-    useEffect(() => {
-        if (!session) return;
+  const setSubscription = useSubscriptionStore(
+    (state) => state.setSubscription
+  );
 
-       return onSnapshot(subscriptionRef(session?.user.id), (snapshot) => {
-            if (snapshot.empty){
-                console.log("User has NO subscription")
-            } else {
-                console.log("User has subscription")
-                setSubscription(snapshot.docs[0].data())
-            }
-            }, (error) => {
-            console.log("Error getting documents:", error);
-            }
-        );  
-    }, [session]);
+  useEffect(() => {
+    if (!session?.user.id) return;
 
-  return (
-    <div>SubscriptionProvider</div>
-  )
+    return onSnapshot(
+      subscriptionRef(session.user.id),
+      (snapshot) => {
+        if (snapshot.empty) {
+          console.log("No such document!");
+          setSubscription(null);
+        } else {
+          console.log("Document data:", snapshot.docs[0].data());
+
+          setSubscription(snapshot.docs[0].data());
+        }
+      },
+      (error) => {
+        console.log("Error getting document:", error);
+      }
+    );
+  }, [session, setSubscription]);
+
+  return <>{children}</>;
 }
-
-export default SubscriptionProvider

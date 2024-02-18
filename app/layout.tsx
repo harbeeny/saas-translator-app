@@ -25,7 +25,7 @@ export default function RootLayout({
     <html lang="en">
       <body className="flex flex-col min-h-screen">
         <FirebaseAuthProvider>
-          {/*<SubscriptionProvider>*/}
+          {/* <SubscriptionProvider> */}
             <ThemeProvider
               attribute="class"
               defaultTheme="system"
@@ -36,7 +36,7 @@ export default function RootLayout({
               {children}
               <Toaster />
             </ThemeProvider>  
-          {/*</SubscriptionProvider>*/}
+          {/* </SubscriptionProvider> */}
         </FirebaseAuthProvider>
       </body>
     </html>
