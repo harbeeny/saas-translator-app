@@ -1,55 +1,43 @@
 "use client";
 
-import { MessageSquarePlusIcon } from "lucide-react";
-import { Button } from "./ui/button";
-import { useRouter } from "next/navigation";
-import { useSubscriptionStore } from "@/store/store";
-import { useState } from "react";
 import { useSession } from "next-auth/react";
-import { useToast } from "./ui/use-toast";
+import { Button } from "./ui/button";
+import { getDocs, serverTimestamp, setDoc } from "firebase/firestore";
+import {
+  addChatRef,
+  chatMembersCollectionGroupRef,
+} from "@/lib/converter/ChatMembers";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import LoadingSpinner from "./LoadingSpinner";
 import { v4 as uuidv4 } from "uuid";
-import { serverTimestamp, setDoc, getDocs } from "firebase/firestore";
-import { 
-  addChatRef, 
-  chatMembersCollectionGroupRef, 
-} from "@/lib/converter/ChatMembers";
+import { MessageSquarePlusIcon } from "lucide-react";
+import { useToast } from "./ui/use-toast";
+import { useSubscriptionStore } from "@/store/store";
 import { ToastAction } from "./ui/toast";
-import { subscriptionRef } from "@/lib/converter/Subscription";
-import { Subscription } from "@/types/Subscription";
 
-const CreateChatButton = ({isLarge}: { isLarge?: boolean}) => {
-    const router = useRouter();
-    const { data: session } = useSession();
-    const [loading, setLoading] = useState(false);
-    const { toast } = useToast();
-    // const subscription = useSubscriptionStore((state) => state.subscription);
-    
-    const createNewChat= async() => {
-      if (!session?.user.id) return;
+function CreateChatButton({ isLarge }: { isLarge?: boolean }) {
+  const { data: session } = useSession();
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const { toast } = useToast();
+  const subscription = useSubscriptionStore((state) => state.subscription);
 
-      setLoading(true);
-      toast({
-        title:"Creating new chat...",
-        description: "Hold tight while we create your new chat!",
-        duration: 3000,
-      });
-    
-    // Need to get the users current chats to check if they're about to exceed the PRO plan
+  const createNewChat = async () => {
+    if (!session?.user.id) return;
+
+    setLoading(true);
+    toast({
+      title: "Creating new chat...",
+      description: "Hold tight while we create your new chat...",
+      duration: 3000,
+    });
+
+    // We need to get the users current chats to check if they're about to exceed the PRO plan
     const chats = (
       await getDocs(chatMembersCollectionGroupRef(session.user.id))
     ).docs.map((doc) => doc.data());
 
-    const subscriptions = (
-      await getDocs(subscriptionRef(session.user.id))
-    ).docs.map((doc) => doc.data());
-    let subscription : Subscription;
-      if(subscriptions.length>0) {
-        subscription = subscriptions[0]
-      }
-      
-      console.log("subscription");
-      console.log(subscription);
     // check if the user is about to exceed the PRO plan which is 3 chats
     const isPro =
       subscription?.role === "pro" && subscription.status === "active";
@@ -74,46 +62,50 @@ const CreateChatButton = ({isLarge}: { isLarge?: boolean}) => {
       return;
     }
 
-      const chatId = uuidv4();
-
-      await setDoc(addChatRef(chatId, session.user.id), {
-        userId: session.user.id!,
-        email: session.user.email!,
-        timestamp: serverTimestamp(),
-        isAdmin: true,
-        chatId: chatId,
-        image: session.user.image || "",
-      }).then(() => {
-          toast({
-            title:"Success",
-            description:"Your chat has been created!",
-            className: "bg-green-600 text-white",
-            duration: 2000,
-          });
-          router.push(`/chat/${chatId}`);
-      }).catch(() => {
+    const chatId = uuidv4();
+    await setDoc(addChatRef(chatId, session.user.id), {
+      userId: session.user.id!,
+      email: session.user.email!,
+      timestamp: serverTimestamp(),
+      isAdmin: true,
+      chatId: chatId,
+      image: session.user.image || "",
+    })
+      .then(() => {
         toast({
-          title:"Error",
-          description:"There was an error creating your chat!",
-          variant:"destructive",
+          title: "Success",
+          description: "Your chat has been created!",
+          className: "bg-green-600 text-white",
+          duration: 2000,
         });
-      }).finally(() => setLoading(false));
-    };
+        router.push(`/chat/${chatId}`);
+      })
+      .catch(() => {
+        toast({
+          title: "Error",
+          description: "There was an error creating your chat!",
+          variant: "destructive",
+        });
+      })
+      .finally(() => setLoading(false));
+  };
 
-    if (isLarge)
+  if (isLarge)
     return (
-        <div>
-          <Button variant={"default"} onClick={createNewChat}>
-            {loading ? <LoadingSpinner /> : "Create a New Chat"}
-          </Button>
-        </div>
-      )
+      <div>
+        <Button variant={"default"} onClick={createNewChat}>
+          {loading ? <LoadingSpinner /> : "Create a New Chat"}
+        </Button>
+      </div>
+    );
 
   return (
-    <Button size={"icon"} variant={"ghost"} onClick={createNewChat}>
+    <div>
+      <Button size={"icon"} variant={"ghost"} onClick={createNewChat}>
         {loading ? <LoadingSpinner /> : <MessageSquarePlusIcon />}
-    </Button>
+      </Button>
+    </div>
   );
-};
+}
 
-export default CreateChatButton
+export default CreateChatButton;
