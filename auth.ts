@@ -6,8 +6,8 @@ import type {
   import type { NextAuthOptions } from "next-auth";
   import { getServerSession } from "next-auth";
   import GoogleProvider from "next-auth/providers/google";
-  import { FirestoreAdapter } from "@auth/firebase-adapter";
   import { adminAuth, adminDB } from "@/firebase-db/firebase-admin";
+  import  { FirestoreAdapter } from "@next-auth/firebase-adapter";
   
   // You'll need to import and pass this
   // to `NextAuth` in `app/api/auth/[...nextauth]/route.ts`
